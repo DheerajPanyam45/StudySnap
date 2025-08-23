@@ -23,7 +23,7 @@ A modern web application that transforms text input into interactive flashcards 
 
 1. **Clone or download the project**
    ```bash
-   cd flashyyyy
+   cd StudySnap
    ```
 
 2. **Install dependencies**
@@ -119,7 +119,7 @@ The application uses Gemini 1.5 Flash with these parameters:
 ### Project Structure
 
 ```
-flashyyyy/
+StudySnap/
 ├── server.js              # Express server and API routes
 ├── package.json           # Dependencies and scripts
 ├── .env.example          # Environment variables template
