@@ -208,9 +208,6 @@ The application provides user-friendly error messages for:
 - Network connectivity issues
 - Malformed responses
 
-## 📄 License
-
-MIT License - feel free to use this project for personal or commercial purposes.
 
 ## 🤝 Contributing
 
