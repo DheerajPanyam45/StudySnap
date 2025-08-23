@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudySnap - AI Flashcard & Quiz Generator</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1><i class="fas fa-brain"></i> StudySnap</h1>
+                <p>Transform your notes into interactive flashcards and quizzes instantly</p>
+            </div>
+        </header>
+
+        <!-- Input Section -->
+        <section class="input-section" id="inputSection">
+            <div class="input-container">
+                <h2><i class="fas fa-edit"></i> Paste Your Text</h2>
+                <textarea 
+                    id="textInput" 
+                    placeholder="Paste your lecture notes, article, or any educational content here... (minimum 50 characters)"
+                    rows="8"
+                ></textarea>
+                <div class="input-actions">
+                    <button id="generateBtn" class="btn btn-primary">
+                        <i class="fas fa-magic"></i> Generate Flashcards & Quiz
+                    </button>
+                    <div class="char-counter" id="charCounter">0 characters</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Loading Section -->
+        <section class="loading-section" id="loadingSection" style="display: none;">
+            <div class="loading-container">
+                <div class="loading-spinner"></div>
+                <h3>Generating your content...</h3>
+                <p>Our AI is analyzing your text and creating personalized flashcards and quiz questions.</p>
+            </div>
+        </section>
+
+        <!-- Results Section -->
+        <section class="results-section" id="resultsSection" style="display: none;">
+            <!-- Mode Toggle -->
+            <div class="mode-toggle">
+                <button id="flashcardsTab" class="tab-btn active">
+                    <i class="fas fa-layer-group"></i> Flashcards
+                </button>
+                <button id="quizTab" class="tab-btn">
+                    <i class="fas fa-question-circle"></i> Quiz Mode
+                </button>
+            </div>
+
+            <!-- Flashcards View -->
+            <div id="flashcardsView" class="content-view">
+                <div class="view-header">
+                    <h2><i class="fas fa-layer-group"></i> Flashcards</h2>
+                    <div class="flashcard-counter">
+                        <span id="currentFlashcard">1</span> / <span id="totalFlashcards">0</span>
+                    </div>
+                </div>
+                
+                <div class="flashcard-container">
+                    <div class="flashcard" id="flashcard">
+                        <div class="flashcard-inner" id="flashcardInner">
+                            <div class="flashcard-front">
+                                <div class="flashcard-content" id="flashcardQuestion">
+                                    Click to flip the card
+                                </div>
+                                <div class="flip-hint">
+                                    <i class="fas fa-redo"></i> Click to reveal answer
+                                </div>
+                            </div>
+                            <div class="flashcard-back">
+                                <div class="flashcard-content" id="flashcardAnswer">
+                                    Answer will appear here
+                                </div>
+                                <div class="flip-hint">
+                                    <i class="fas fa-undo"></i> Click to see question
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="navigation">
+                    <button id="prevFlashcard" class="btn btn-secondary">
+                        <i class="fas fa-chevron-left"></i> Previous
+                    </button>
+                    <button id="nextFlashcard" class="btn btn-secondary">
+                        Next <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Quiz View -->
+            <div id="quizView" class="content-view" style="display: none;">
+                <div class="view-header">
+                    <h2><i class="fas fa-question-circle"></i> Quiz Mode</h2>
+                    <div class="quiz-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                        <span class="progress-text">
+                            Question <span id="currentQuestion">1</span> of <span id="totalQuestions">10</span>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="quiz-container">
+                    <div class="question-container" id="questionContainer">
+                        <h3 id="quizQuestion">Quiz question will appear here</h3>
+                        <div class="options-container" id="optionsContainer">
+                            <!-- Options will be populated dynamically -->
+                        </div>
+                    </div>
+
+                    <div class="quiz-feedback" id="quizFeedback" style="display: none;">
+                        <div class="feedback-content">
+                            <div class="feedback-icon" id="feedbackIcon"></div>
+                            <p id="feedbackText"></p>
+                            <div class="explanation" id="explanation"></div>
+                        </div>
+                    </div>
+
+                    <div class="quiz-navigation">
+                        <button id="nextQuestion" class="btn btn-primary" style="display: none;">
+                            Next Question <i class="fas fa-chevron-right"></i>
+                        </button>
+                        <button id="finishQuiz" class="btn btn-success" style="display: none;">
+                            <i class="fas fa-flag-checkered"></i> Finish Quiz
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Quiz Results -->
+                <div class="quiz-results" id="quizResults" style="display: none;">
+                    <div class="results-container">
+                        <h3><i class="fas fa-trophy"></i> Quiz Complete!</h3>
+                        <div class="score-display">
+                            <div class="score-circle">
+                                <span id="finalScore">0</span>%
+                            </div>
+                        </div>
+                        <p class="score-text">
+                            You got <span id="correctAnswers">0</span> out of <span id="totalQuizQuestions">10</span> questions correct!
+                        </p>
+                        <button id="retakeQuiz" class="btn btn-primary">
+                            <i class="fas fa-redo"></i> Retake Quiz
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="bottom-actions">
+                <button id="generateNewBtn" class="btn btn-outline">
+                    <i class="fas fa-plus"></i> Generate New Content
+                </button>
+            </div>
+        </section>
+
+        <!-- Error Section -->
+        <section class="error-section" id="errorSection" style="display: none;">
+            <div class="error-container">
+                <div class="error-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <h3>Oops! Something went wrong</h3>
+                <p id="errorMessage">An error occurred while generating content.</p>
+                <button id="tryAgainBtn" class="btn btn-primary">
+                    <i class="fas fa-redo"></i> Try Again
+                </button>
+            </div>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
